@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Container, Day, Header, Body } from './styles'
-import firebase from '../../firebase'
+import axios from 'axios'
 import useCalendar from '../../hooks/useCalendar'
 import Modal from '../modal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -8,24 +8,38 @@ import { faArrowRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { uuid } from 'uuidv4'
 import { convertMonth } from '../../utils'
 
-const Calendar = () => {
+const Calendar = ({ id }) => {
 
     const now = new Date()
 
     const [year, setYear] = useState(now.getFullYear())
     const [month, setMonth] = useState(now.getMonth() + 1)
     const [modal, setModal] = useState(false)
+    const [reload, setReload] = useState(0)
     const [currentDay, setCurrentDay] = useState()
-    const { days } = useCalendar(year, month)
+    const [modalType, setModalType] = useState('')
+    const [dayInfo, setDayInfo] = useState('')
+    const { days } = useCalendar(year, month, id, reload)
 
     const createPin = (day, info) => {
-        firebase.database().ref(`teste/`).push({
-            date: `${year}-${day}-${month}`,
-            title: info.title,
-            description: info.description
+        axios({
+            method: 'POST',
+            url: 'http://localhost/api/plan/merge.php',
+            headers: {
+                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwYjcwZGU3Ni0wNTg4LTRkOWMtOGIyMS0xNjQyNDk4NzYyZTQifQ==.2yZCxWpYimEhRMHEhgx9+dGksY/ZdUns4+hKnEH1Qu0='
+            },
+            data: {
+                name: info.title,
+                description: info.description,
+                date: `${year}-${month}-${day}`,
+                calendarId: "3144a86c-0c83-428d-8086-021994c8dd06"
+            }
         })
+            .then(result => {
+                setModal(false)
+                setReload(reload + 1)
+            })
 
-        setModal(false)
     }
 
 
@@ -47,7 +61,9 @@ const Calendar = () => {
         }
     }
 
-    const onClickDay = day => {
+    const onClickDay = (day, type, info) => {
+        setModalType(type)
+        setDayInfo(info)
         setModal(true)
         setCurrentDay(day)
     }
@@ -60,15 +76,21 @@ const Calendar = () => {
                 <button onClick={increaseMonth}><FontAwesomeIcon icon={faArrowRight} /></button>
             </Header>
             <Body>
+
                 {
                     days.map((days, i) =>
-                        <Day day={days.day} onClick={() => onClickDay(days.day)} pin={days.pin} key={i}>{days.day}</Day>
+                        <Day day={days.day}
+                            onClick={() => onClickDay(days.day, days.pin ? 'remove' : 'merge', { id: days.id, name: days.name, description: days.description, date: days.date })}
+                            pin={days.pin}
+                            key={i}>
+                            {days.day}
+                        </Day>
                     )
                 }
             </Body>
             {
                 modal &&
-                <Modal onConfirm={(info) => createPin(currentDay, info)} onClose={() => setModal(false)} />
+                <Modal dayInfo={dayInfo} type={modalType} onConfirm={(info) => createPin(currentDay, info)} onClose={() => setModal(false)} />
             }
         </Container>
     )
