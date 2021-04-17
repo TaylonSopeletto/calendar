@@ -14,8 +14,8 @@ const Modal = ({ onClose, onConfirm, type, dayInfo }) => {
     const [darkMode, setDarkMode] = useContext(DarkModeCtx)
 
     const [info, setInfo] = useState({
-        title: dayInfo.name,
-        description: dayInfo.description
+        title: '',
+        description: ''
     })
 
     useEffect(() => {
@@ -32,15 +32,7 @@ const Modal = ({ onClose, onConfirm, type, dayInfo }) => {
         <Container>
             <View theme={darkMode}>
                 <Header theme={darkMode}>
-                    {
-                        type === 'merge' &&
-                        <h2>Add Schedule</h2>
-                    }
-
-                    {
-                        type === 'remove' &&
-                        <h2>Remove {dayInfo.id}</h2>
-                    }
+                    <h2>Add Schedule</h2>
                     <button onClick={onClose}><FontAwesomeIcon icon={faTimes} /></button>
                 </Header>
                 <Body>

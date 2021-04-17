@@ -1,19 +1,30 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Container, Tab, Tabs, Header, Body, Item } from './styles'
 import { DarkModeCtx } from '../../context/DarkModeCtx'
-import { getByDate } from '../../fetch/plans'
+import { find } from '../../fetch/plans'
+import { convertDate } from '../utils/'
 
-const Details = ({ calendarId }) => {
+const Details = ({ calendarId, reload, month }) => {
 
     const [darkMode, setDarkMode] = useContext(DarkModeCtx)
+    const [days, setDays] = useState([])
 
     useEffect(() => {
-        getByDate({
+        find({
             calendarId,
-            date: '2021-04-01'
         })
-            .then(result => console.log(result.data))
-    }, [])
+            .then(result => {
+                const filteredDays = result.data.filter(item => {
+
+                    const [year, dateMonth, day] = item.date.split('-')
+                    if (Number(dateMonth) === month) {
+                        return day
+                    }
+                })
+
+                setDays(filteredDays)
+            })
+    }, [reload, month])
 
     return (
         <Container>
@@ -23,15 +34,14 @@ const Details = ({ calendarId }) => {
                 </Tabs>
             </Header>
             <Body theme={darkMode}>
-                <Item theme={darkMode}>
-                    <p>04/09/2020</p>
-                    <p>Taylon's aniversary</p>
-                </Item>
-
-                <Item theme={darkMode}>
-                    <p>04/09/2020</p>
-                    <p>Taylon's aniversary</p>
-                </Item>
+                {
+                    days.map((day, i) =>
+                        <Item key={i} theme={darkMode}>
+                            <p>{convertDate(day.date)}</p>
+                            <p>{day.name}</p>
+                        </Item>
+                    )
+                }
             </Body>
         </Container>
     )

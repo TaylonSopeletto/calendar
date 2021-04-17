@@ -13,3 +13,16 @@ export const getByDate = data => {
 
     return request
 }
+
+export const find = data => {
+    const request = axios({
+        url: `${baseUrl}/plan/find.php`,
+        headers: {
+            'Authorization': localStorage.getItem('@calendar-token')
+        },
+        method: 'GET',
+        params: { ...data }
+    })
+
+    return request
+}

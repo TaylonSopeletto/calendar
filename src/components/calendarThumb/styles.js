@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 export const Container = styled.div`
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -29,3 +30,4 @@ export const Title = styled.div`
     color: ${props => (props.theme === true ? 'var(--text)' : 'var(--light-text)')};
     font-weight: bold;
 `
+

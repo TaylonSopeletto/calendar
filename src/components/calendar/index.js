@@ -9,20 +9,20 @@ import { uuid } from 'uuidv4'
 import { convertMonth } from '../../utils'
 import { DarkModeCtx } from '../../context/DarkModeCtx'
 
-const Calendar = ({ id }) => {
+const Calendar = ({ id, reload, setReload, month, setMonth }) => {
 
     const [darkMode, setDarkMode] = useContext(DarkModeCtx)
 
     const now = new Date()
 
     const [year, setYear] = useState(now.getFullYear())
-    const [month, setMonth] = useState(now.getMonth() + 1)
     const [modal, setModal] = useState(false)
-    const [reload, setReload] = useState(0)
+
     const [currentDay, setCurrentDay] = useState()
     const [modalType, setModalType] = useState('')
     const [dayInfo, setDayInfo] = useState('')
     const { days } = useCalendar(year, month, id, reload)
+
 
     const createPin = (day, info) => {
         axios({

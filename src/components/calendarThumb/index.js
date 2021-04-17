@@ -6,6 +6,7 @@ import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 const CalendarThumb = ({ title, role, plus, theme }) => {
     return (
         <Container theme={theme}>
+
             {
                 plus ?
 

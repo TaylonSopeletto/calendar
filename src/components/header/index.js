@@ -3,6 +3,8 @@ import { Container, SearchBar, Profile, Avatar, DarkMode } from './styles'
 import { DarkModeCtx } from '../../context/DarkModeCtx'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons'
+import { Link } from 'react-router-dom'
+
 const Header = () => {
 
     const [darkMode, setDarkMode] = useContext(DarkModeCtx)
@@ -13,7 +15,9 @@ const Header = () => {
 
     return (
         <Container theme={darkMode}>
-            <a href="/calendars"><h1>Calendar</h1></a>
+            <Link to='/calendars'>
+                <h1>Calendar</h1>
+            </Link>
 
             <SearchBar theme={darkMode}>
                 <input placeholder="search"></input>

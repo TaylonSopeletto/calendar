@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react'
-import { uuid } from 'uuidv4'
+import { find } from '../fetch/plans'
 
 const useCalendar = (year, month, id, reload) => {
 
@@ -20,13 +20,7 @@ const useCalendar = (year, month, id, reload) => {
         let daysArray = []
 
 
-        axios({
-            method: 'GET',
-            url: `http://localhost/api/plan/find.php?calendarId=${id}`,
-            headers: {
-                'Authorization': localStorage.getItem('@calendar-token')
-            },
-        })
+        find({ calendarId: id })
             .then(result => {
 
                 for (let i = 0; i < date.getDate(); i++) {

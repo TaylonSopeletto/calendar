@@ -5,6 +5,7 @@ export const Container = styled.div`
     box-shadow: 0px 1px 5px 2px rgba(0,0,0, 0.1);
     width: 420px;
     
+    
 `
 
 export const Header = styled.div`
@@ -29,7 +30,16 @@ export const Tab = styled.button`
 
 export const Body = styled.div`
     background-color: ${props => (props.theme === true ? 'var(--primary)' : 'var(--light-primary)')};
-    
+    height: 400px;
+    overflow-y: scroll;
+    &::-webkit-scrollbar-thumb {
+        width: 10px;
+        background-color: ${props => (props.theme === true ? 'var(--tertiary)' : 'var(--light-tertiary)')};
+    }
+    &::-webkit-scrollbar {
+        width: 10px;
+       
+    }
 
 `
 
