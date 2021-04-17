@@ -7,6 +7,7 @@ export default createGlobalStyle`
         box-sizing: border-box;
     }
     html, body, #root {
+        
         height: 100%;
       }
       *, button, input {
@@ -15,11 +16,20 @@ export default createGlobalStyle`
         font-family: 'Roboto', sans-serif;
       }
       :root{
-          --primary: #fff;
-          --secundary: #f5f5f5;
-          --tertiary: #595959;
+          --light-primary: #FFFFFF;
+          --light-secundary: #F3F3F3;
+          --light-tertiary: #eeee;
+          --light-text: #000000;
+          --light-input: #eeee;
+          --light-border: #bbb;
+
+          --primary: #383838;
+          --secundary: #303030;
+          --text: #FFFFFF;
+          --tertiary: #454545;
           --blue: #063DFF;
-          --border: #E7E7E7;
+          --border: #595959;
           --font: #363636;
+          --input: #414141;
       }
 `

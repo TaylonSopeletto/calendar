@@ -23,7 +23,9 @@ const useCalendar = (year, month, id, reload) => {
         axios({
             method: 'GET',
             url: `http://localhost/api/plan/find.php?calendarId=${id}`,
-            headers: { 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwYjcwZGU3Ni0wNTg4LTRkOWMtOGIyMS0xNjQyNDk4NzYyZTQifQ==.2yZCxWpYimEhRMHEhgx9+dGksY/ZdUns4+hKnEH1Qu0=' }
+            headers: {
+                'Authorization': localStorage.getItem('@calendar-token')
+            },
         })
             .then(result => {
 

@@ -1,54 +1,41 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Container, View, Header, Body } from './styles'
-import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import InputGroup from '../inputGroup'
-import { useParams } from 'react-router-dom'
+import { merge } from '../../fetch/calendars'
 import { DarkModeCtx } from '../../context/DarkModeCtx'
 
-const Modal = ({ onClose, onConfirm, type, dayInfo }) => {
-
-    const { id } = useParams()
+const Modal = ({ onClose, reloadCalendars, theme }) => {
 
     const [darkMode, setDarkMode] = useContext(DarkModeCtx)
 
-    const [info, setInfo] = useState({
-        title: dayInfo.name,
-        description: dayInfo.description
+    const [payload, setPayload] = useState({
+        name: '',
+        description: ''
     })
 
-    useEffect(() => {
-        axios({
-            method: 'GET',
-            url: `http://localhost/api/plan/find.php?id=${id}`,
-            headers: {
-                'Authorization': localStorage.getItem('@calendar-token')
-            },
-        })
-    }, [])
+    const onConfirm = () => {
+        merge({ ...payload })
+            .then(result => {
+                onClose()
+                reloadCalendars()
+            })
+    }
 
     return (
         <Container>
             <View theme={darkMode}>
                 <Header theme={darkMode}>
-                    {
-                        type === 'merge' &&
-                        <h2>Add Schedule</h2>
-                    }
-
-                    {
-                        type === 'remove' &&
-                        <h2>Remove {dayInfo.id}</h2>
-                    }
+                    <h2>Add Calendar</h2>
                     <button onClick={onClose}><FontAwesomeIcon icon={faTimes} /></button>
                 </Header>
                 <Body>
                     <InputGroup>
                         {
                             <>
-                                <label>Title:</label>
-                                <input onChange={e => setInfo({ ...info, title: e.target.value })} value={info.title}></input>
+                                <label>Name:</label>
+                                <input onChange={e => setPayload({ ...payload, name: e.target.value })} value={payload.name}></input>
                             </>
                         }
                     </InputGroup>
@@ -57,14 +44,14 @@ const Modal = ({ onClose, onConfirm, type, dayInfo }) => {
                         {
                             <>
                                 <label>Description:</label>
-                                <input onChange={e => setInfo({ ...info, description: e.target.value })} value={info.description}></input>
+                                <input onChange={e => setPayload({ ...payload, description: e.target.value })} value={payload.description}></input>
                             </>
                         }
                     </InputGroup>
 
                     <InputGroup>
                         {
-                            <button onClick={() => onConfirm(info)} >Submit</button>
+                            <button onClick={() => onConfirm()}>Create calendar</button>
                         }
                     </InputGroup>
                 </Body>

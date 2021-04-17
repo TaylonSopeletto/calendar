@@ -13,7 +13,6 @@ export const Form = styled.div`
     flex-direction: column;
     width: 30em;
     gap: 20px;
-   
 `
 
 export const Title = styled.p`
